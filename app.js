@@ -93,6 +93,8 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
       previousroll = dice;
     }
   } else {
+    //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
+    previousroll = 0;
     if (dice !== 1) {
       // ha nem 1 a dobott érték akkor felírjuk a pontszámot, és ugyanaz a játékos dobhat újra
       // elágazás:
@@ -100,12 +102,8 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
       // a UI-on megjelenítjük az eredményt:
       document.querySelector("#current-" + activePlayer).textContent =
         roundScore;
-      //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
-      previousroll = 0;
     } else {
       // ha a dobott érték 1, akkor a pontok elvesznek és a következő játékos jön
-      //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
-      previousroll = 0;
       nextPlayer();
     }
   }
