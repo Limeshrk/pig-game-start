@@ -18,9 +18,23 @@
 // console.log(scores[0]);
 
 // változó deklarálás
-let scores, roundScore, activePlayer;
+let scores, roundScore, activePlayer, maxscore, input;
+
+function setScore() {
+  document.querySelector(".final-score").placeholder = ""; //kidobja a placeholdert a vizsgálathoz
+  //ha adtunk meg értéket
+  if (document.querySelector(".final-score").value !== "") {
+    maxscore = document.querySelector(".final-score").value;
+  }
+  //Ha nem akkor alapérték
+  else {
+    maxscore = 100;
+    document.querySelector(".final-score").placeholder = "Final Score"; //ne maradjon ures a mező
+  }
+}
 
 function newGame() {
+  setScore();
   // a játékosok pontszámai, mindkét játákos null ponttal indul
   // értékadás : value assignment
   scores = [0, 0];
@@ -60,7 +74,6 @@ function newGame() {
   document.querySelector(".player-1-panel").classList.remove("active");
   document.querySelector(".player-0-panel").classList.add("active");
 }
-
 newGame();
 
 // a kokca dobás, gombra kattintás
@@ -116,7 +129,7 @@ document.querySelector(".btn-hold").addEventListener("click", function () {
     scores[activePlayer];
 
   // 3. nézzük meg hogy van e nyertes
-  if (scores[activePlayer] >= 20) {
+  if (scores[activePlayer] >= maxscore) {
     document
       .querySelector(`.player-${activePlayer}-panel`)
       .classList.add("winner");
