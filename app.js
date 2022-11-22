@@ -31,6 +31,9 @@ function newGame() {
   // az első játékos kezd
   activePlayer = 0;
 
+  //előző 6-os dobás ellenőrzés alapérték
+  previousroll = 0;
+
   // dom manipuláció (dom: document object model = HTML kód)
 
   // kiválsztjuk a score-0 id-vel rendelkező html elemet
@@ -78,15 +81,33 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
   // string concatenation
   // document.querySelector('.dice').setAttribute('src', 'dice-'+dice+'.png');
 
-  // ha nem 1 a dobott érték akkor felírjuk a pontszámot, és ugyanaz a játékos dobhat újra
-  // elágazás:
-  if (dice !== 1) {
-    roundScore = roundScore + dice;
-    // a UI-on megjelenítjük az eredményt:
-    document.querySelector("#current-" + activePlayer).textContent = roundScore;
+  // 6-os dobás feltételvizsgálat
+  if (dice == 6) {
+    if (previousroll == dice) {
+      scores[activePlayer] = 0;
+      nextPlayer();
+    } else {
+      roundScore = roundScore + dice;
+      document.querySelector("#current-" + activePlayer).textContent =
+        roundScore;
+      previousroll = dice;
+    }
   } else {
-    // ha a dobott érték 1, akkor a pontok elvesznek és a következő játékos jön
-    nextPlayer();
+    if (dice !== 1) {
+      // ha nem 1 a dobott érték akkor felírjuk a pontszámot, és ugyanaz a játékos dobhat újra
+      // elágazás:
+      roundScore = roundScore + dice;
+      // a UI-on megjelenítjük az eredményt:
+      document.querySelector("#current-" + activePlayer).textContent =
+        roundScore;
+      //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
+      previousroll = 0;
+    } else {
+      // ha a dobott érték 1, akkor a pontok elvesznek és a következő játékos jön
+      //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
+      previousroll = 0;
+      nextPlayer();
+    }
   }
 });
 
