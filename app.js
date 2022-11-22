@@ -1,5 +1,6 @@
 // console.log('hello word');
 
+//const { ESLint } = require("eslint");
 // változó deklarálás
 // let pontszam = 4;
 // nem módosítható változó deklarálás
@@ -18,7 +19,7 @@
 // console.log(scores[0]);
 
 // változó deklarálás
-let scores, roundScore, activePlayer;
+let scores, roundScore, activePlayer, previousroll;
 
 function newGame() {
   // a játékosok pontszámai, mindkét játákos null ponttal indul
@@ -31,8 +32,8 @@ function newGame() {
   // az első játékos kezd
   activePlayer = 0;
 
-  //előző 6-os dobás ellenőrzés alapérték
-  previousroll = 0;
+  //ures korabbi tobas tabla
+  previousroll = [0, 0];
 
   // dom manipuláció (dom: document object model = HTML kód)
 
@@ -81,20 +82,23 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
   // string concatenation
   // document.querySelector('.dice').setAttribute('src', 'dice-'+dice+'.png');
 
-  // 6-os dobás feltételvizsgálat
+  //Ha 6-os akkor elagazunk
   if (dice == 6) {
-    if (previousroll == dice) {
-      scores[activePlayer] = 0;
+    if (previousroll[activePlayer] == dice) {
+      //ha van az elozo dobasbol eltarolt 6-os
+      scores[activePlayer] = 0; //torli az elert pontszamot
+      previousroll[activePlayer] = 0; //torli a tarolt 6-ost
       nextPlayer();
     } else {
-      roundScore = roundScore + dice;
+      previousroll[activePlayer] = dice; //nem 6-os volt az elozo, de most eltároljuk mint utolso dobas
+      roundScore = roundScore + dice; //frissitjuk a kor pontszamat
+      // a UI-on megjelenítjük az eredményt:
       document.querySelector("#current-" + activePlayer).textContent =
         roundScore;
-      previousroll = dice;
     }
   } else {
-    //nem 6-os volt ezért töröljuk az előző 6-os dobás változót
-    previousroll = 0;
+    //minden más dobás esetén
+    previousroll[activePlayer] = 0; //torli a tarolt 6-ost mert nem 6-ost dobtunk a korben
     if (dice !== 1) {
       // ha nem 1 a dobott érték akkor felírjuk a pontszámot, és ugyanaz a játékos dobhat újra
       // elágazás:
@@ -126,6 +130,8 @@ function nextPlayer() {
 }
 
 document.querySelector(".btn-hold").addEventListener("click", function () {
+  // 0. A pontfeliráskor törli az esetleg eltárolt 6-ost ha éppen 6-ost dobott és nem 2x egymás után - ha legközelebb 6-ossal kezdene esetre
+  previousroll[activePlayer] = 0;
   // 1. a játékos megszerzi a kör alatt szerzett pontjait
   scores[activePlayer] = scores[activePlayer] + roundScore;
   // scores[activePlayer] += roundScore;
