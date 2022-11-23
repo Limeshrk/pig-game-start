@@ -66,13 +66,14 @@ newGame();
 // a kokca dobás, gombra kattintás
 document.querySelector(".btn-roll").addEventListener("click", function () {
   // 1. generálunk egy véletlen számot, 1-6 között
-  const dice = Math.floor(Math.random() * 6) + 1;
+  const dice1 = Math.floor(Math.random() * 6) + 1;
+  const dice2 = Math.floor(Math.random() * 6) + 1;
 
   // 2. jelenítsük meg az eredményt a UI-on:
   document.querySelector(".dice").style.display = "block";
   // template string
-  document.querySelector(".dice").setAttribute("src", `dice-${dice}.png`);
-
+  document.querySelector("#dice-1").setAttribute("src", `dice-${dice1}.png`);
+  document.querySelector("#dice-2").setAttribute("src", `dice-${dice2}.png`);
   // szekvencia: a program az utasításokat sorról sorra hatja végre
 
   // string concatenation
@@ -80,8 +81,8 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
 
   // ha nem 1 a dobott érték akkor felírjuk a pontszámot, és ugyanaz a játékos dobhat újra
   // elágazás:
-  if (dice !== 1) {
-    roundScore = roundScore + dice;
+  if (dice1 !== 1 && dice2 !== 1) {
+    roundScore = roundScore + dice1 + dice2;
     // a UI-on megjelenítjük az eredményt:
     document.querySelector("#current-" + activePlayer).textContent = roundScore;
   } else {
